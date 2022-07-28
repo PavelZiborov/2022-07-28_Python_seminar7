@@ -35,20 +35,16 @@ def CalculateSimpleOperations(lst):
 def Calculator(lst):
     tempList = []
     if '(' in lst or ')' in lst:
-        for item in enumerate(lst):
-            if item[1] == '(':
-                index_of_first_parenthesis = item[0]
-
-        for item in enumerate(lst):
-            if item[1] == ')':
-                index_of_second_parenthesis = item[0]
-
+        # переворачивает список что бы найти последнее вхождение
+        revers_lst = lst[::-1].index('(')
+        index_of_first_parenthesis = len(lst) - 1 - revers_lst
+        index_of_second_parenthesis = lst.index(')', index_of_first_parenthesis)
+        # добавляет в tempList элементы между скобками, вычисляет, а затем удаляет их
         for i in range(index_of_first_parenthesis+1, index_of_second_parenthesis):
             tempList.append(lst[i])
         lst.insert(index_of_first_parenthesis, CalculateSimpleOperations(tempList))
-        # print(lst)
         del lst[index_of_first_parenthesis+1:index_of_second_parenthesis+2]
-        # print(lst)
-        return CalculateSimpleOperations(lst)
+        # рекурсия позволяет вычислить и удалить все скобки
+        return Calculator(lst)
     else:
         return CalculateSimpleOperations(lst)
